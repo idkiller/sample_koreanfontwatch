@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns="http://tizen.org/ns/packages" package="org.example.koreanfotnwatch" api-version="2.3.2" version="1.0.0">
+	<profile name="wearable" />
+	<watch-application appid="org.example.koreanfotnwatch" exec="koreanfotnwatch" ambient-support="true">
+		<icon>koreanfotnwatch.png</icon>
+		<label>koreanfotnwatch</label>
+	</watch-application>
+	<privileges>
+		<privilege>http://tizen.org/privilege/alarm.set</privilege>
+	</privileges>
+</manifest>

@@ -1,0 +1,65 @@
+fonts {
+   font: "padosori.ttf" "padosori";
+}
+collections {
+   base_scale: 1.0;
+   group { name: "main";
+      min: 100 80;
+      max: 100 80;
+      parts {
+         part { name: "clipper";
+            type: RECT;
+            scale: 1;
+            description { state: "default" 0.0;
+               rel1.relative: 0.0 0.0;
+               rel2.relative: 1.0 1.0;
+               color: 100 100 100 255;
+            }
+         }
+         part { name: "text1";
+            type: TEXT;
+            scale: 1;
+            effect: SOFT_OUTLINE;
+            clip_to: "clipper";
+            description { state: "default" 0.0;
+               rel1.relative: 0.0 0.0;
+               rel2.relative: 1.0 1.0;
+               color: 255 255 255 255;
+               color2: 0 136 170 100;
+               text {
+                  size: 50;
+                  font: "padosori";
+                  text:"Test";
+                  align: 0.5 0.5;
+               }
+            }
+         }
+         part { name: "text2";
+            type: TEXT;
+            scale: 1;
+            effect: SOFT_OUTLINE;
+            clip_to: "clipper";
+            description { state: "default" 0.0;
+               rel1 {
+                  to_x: "text1";
+                  to_y: "text1";
+                  relative: 0.0 1.0;
+               }
+               rel2 {
+                  to_x: "text1";
+                  to_y: "text1";
+                  relative: 1.0 2.0;
+               }
+               color: 255 255 255 255;
+               color2: 0 136 170 100;
+               text {
+                  size: 50;
+                  font: "padosori";
+                  text:"Test";
+                  align: 0.5 0.5;
+               }
+            }
+         }
+      }
+   }
+}
