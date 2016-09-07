@@ -4,6 +4,8 @@
 
 #include <string>
 
+using pius::utils::LogD;
+
 typedef struct appdata {
 	Evas_Object *win;
 	Evas_Object *conform;
@@ -12,6 +14,15 @@ typedef struct appdata {
 } appdata_s;
 
 #define TEXT_BUF_SIZE 256
+
+const char* krsec[] = {
+		"영", "일", "이", "삼", "사", "오", "육", "칠", "팔", "구", "십",
+		"십일", "십이", "십삼", "십사", "십오", "십육", "십칠", "십팔", "십구", "이십",
+		"이십일", "이십이", "이십삼", "이십사", "이십오", "이십육", "이십칠", "이십팔", "이십구", "삼십",
+		"삼십일", "삼십이", "삼십삼", "삼십사", "삼십오", "삼십육", "삼십칠", "삼십팔", "삼십구", "사십",
+		"사십일", "사십이", "사십삼", "사십사", "사십오", "사십육", "사십칠", "사십팔", "사십구", "오십",
+		"오십일", "오십이", "오십삼", "오십사", "오십오", "오십육", "오십칠", "오십팔", "오십구"
+};
 
 static void update_watch(appdata_s *ad, watch_time_h watch_time, int ambient)
 {
@@ -24,15 +35,9 @@ static void update_watch(appdata_s *ad, watch_time_h watch_time, int ambient)
 	watch_time_get_hour24(watch_time, &hour24);
 	watch_time_get_minute(watch_time, &minute);
 	watch_time_get_second(watch_time, &second);
-	if (!ambient) {
-		snprintf(watch_text, TEXT_BUF_SIZE, "<align=center>Hello Watch<br/>%02d:%02d:%02d</align>",
-			hour24, minute, second);
-	} else {
-		snprintf(watch_text, TEXT_BUF_SIZE, "<align=center>Hello Watch<br/>%02d:%02d</align>",
-			hour24, minute);
-	}
+	snprintf(watch_text, TEXT_BUF_SIZE, "%s", krsec[second]);
 
-	elm_object_text_set(ad->label, watch_text);
+	elm_object_part_text_set(ad->test, "text2", watch_text);
 }
 
 static void create_base_gui(appdata_s *ad, int width, int height)
@@ -55,17 +60,19 @@ static void create_base_gui(appdata_s *ad, int width, int height)
 	elm_win_resize_object_add(ad->win, ad->conform);
 	evas_object_show(ad->conform);
 
+	Evas_Object *tmp = evas_object_rectangle_add(evas_object_evas_get(ad->conform));
+	evas_object_color_set(tmp, 255, 0, 0, 255);
+	evas_object_move(tmp, width/2 - 50, height / 3);
+	evas_object_resize(tmp, 100, 80);
+	evas_object_show(tmp);
+
 	ad->test = elm_layout_add(ad->conform);
-	elm_layout_file_set(ad->test, GetResource("edje/face.edj").c_str(), "main");
-	evas_object_move(ad->test, width - 50, height / 3);
+	elm_layout_file_set(ad->test, pius::utils::GetResource("edje/watch.edj").c_str(), "main");
+	evas_object_move(ad->test, width/2 - 50, height / 3);
+	evas_object_resize(ad->test, 100, 80);
+	LogD("%d, %d - ", width/2 - 50, height / 3);
 	evas_object_show(ad->test);
 
-
-	/* Label*/
-	ad->label = elm_label_add(ad->conform);
-	evas_object_resize(ad->label, width, height / 3);
-	evas_object_move(ad->label, 0, height / 3);
-	evas_object_show(ad->label);
 
 	ret = watch_time_get_current_time(&watch_time);
 	if (ret != APP_ERROR_NONE)
@@ -84,9 +91,9 @@ static bool app_create(int width, int height, void *data)
 		Initialize UI resources and application's data
 		If this function returns true, the main loop of application starts
 		If this function returns false, the application is terminated */
-	appdata_s *ad = data;
+	appdata_s *ad = static_cast<appdata_s*>(data);
 
-	InitializeConfigs("KoreanFontWatch");
+	pius::utils::InitializeConfigs("KoreanFontWatch");
 
 	create_base_gui(ad, width, height);
 
@@ -116,14 +123,14 @@ static void app_terminate(void *data)
 static void app_time_tick(watch_time_h watch_time, void *data)
 {
 	/* Called at each second while your app is visible. Update watch UI. */
-	appdata_s *ad = data;
+	appdata_s *ad = static_cast<appdata_s*>(data);
 	update_watch(ad, watch_time, 0);
 }
 
 static void app_ambient_tick(watch_time_h watch_time, void *data)
 {
 	/* Called at each minute while the device is in ambient mode. Update watch UI. */
-	appdata_s *ad = data;
+	appdata_s *ad = static_cast<appdata_s*>(data);
 	update_watch(ad, watch_time, 1);
 }
 

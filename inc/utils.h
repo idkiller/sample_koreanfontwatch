@@ -15,7 +15,7 @@ namespace utils {
 
 void LogD(const char* fmt, ...);
 
-void InitializeConfigs();
+int InitializeConfigs(const std::string& appName);
 
 std::string GetResource(const std::string& name);
 

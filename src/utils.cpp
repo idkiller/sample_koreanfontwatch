@@ -1,7 +1,8 @@
 #include "utils.h"
 
-#include <string>
+#include <string>\
 
+#include <dlog.h>
 #include <app_common.h>
 
 namespace pius {
@@ -16,7 +17,7 @@ void LogD(const char* fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	dlog_vprint(DLOG_ERROR, LogTag, fmt, args);
+	dlog_vprint(DLOG_ERROR, LogTag.c_str(), fmt, args);
 	va_end(args);
 }
 
@@ -25,15 +26,20 @@ int InitializeConfigs(const std::string& appName)
 	if (IsInitialized) return 0;
 	LogTag = appName;
 
+	LogD("--------------1");
 	char *resRoot = app_get_resource_path();
+	LogD("--------------2");
 	if (resRoot == nullptr)
 	{
 		LogD("Can't get resource directory");
 		return 1;
 	}
+	LogD("--------------3");
 	ResourceRoot = std::string(resRoot);
 	free(resRoot);
+	LogD("--------------4");
 
+	return 0;
 }
 
 static std::string CombinePath(const std::string& path1, const std::string& path2)
